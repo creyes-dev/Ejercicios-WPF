@@ -38,14 +38,18 @@ namespace MasDeUnStoryboardMismoElemento
             AnimarAlien();
         }
 
+        /// <summary>
+        /// Si la animación ha finalizado proceder a detenerla y vaciar su colección de hijos
+        /// que son las animaciones que mueven verticalmente y horizontalmente a la figura del alien
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TranslateAnimation_Completed(object sender, EventArgs e)
         {
             this.pathAnimationStoryboard.Stop();
             this.pathAnimationStoryboard.Children.Clear();
             
-            this.Canvas.Children.Remove(alien);
             this.Canvas.Children.Remove(pathAlien);
-
             AnimarAlien();
         }
 
@@ -72,7 +76,7 @@ namespace MasDeUnStoryboardMismoElemento
             DoubleAnimationUsingPath animacionEjeX =
                 new DoubleAnimationUsingPath();
             animacionEjeX.PathGeometry = caminoOnda;
-            //animacionEjeX.Duration = TimeSpan.FromSeconds(5);
+            animacionEjeX.Duration = TimeSpan.FromSeconds(3);
             animacionEjeX.Source = PathAnimationSource.X; // movimiento sobre el eje X
             
             // Asociar la animación para que oriente la propiedad X de
@@ -85,7 +89,7 @@ namespace MasDeUnStoryboardMismoElemento
             DoubleAnimationUsingPath animacionEjeY =
                 new DoubleAnimationUsingPath();
             animacionEjeY.PathGeometry = caminoOnda;
-            //animacionEjeY.Duration = TimeSpan.FromSeconds(5);
+            animacionEjeY.Duration = TimeSpan.FromSeconds(3);
             animacionEjeY.Source = PathAnimationSource.Y; // movimiento sobre el eje Y
 
             // Asociar la animacion para que oriente la propiedad Y de
