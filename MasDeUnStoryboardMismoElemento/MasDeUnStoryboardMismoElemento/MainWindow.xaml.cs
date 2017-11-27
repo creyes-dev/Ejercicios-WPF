@@ -35,7 +35,7 @@ namespace MasDeUnStoryboardMismoElemento
 
         private void Canvas_Loaded(object sender, RoutedEventArgs e)
         {
-            AnimarAlien();
+            AnimarAlien(true);
         }
 
         /// <summary>
@@ -46,17 +46,24 @@ namespace MasDeUnStoryboardMismoElemento
         /// <param name="e"></param>
         private void TranslateAnimation_Completed(object sender, EventArgs e)
         {
+            double lefty = Canvas.GetLeft(alien);
+                        
+            Point coordenadaAlien = alien.PointToScreen(new Point(0, 0));
+            Point coordenadaCanvas = this.Canvas.PointFromScreen(new Point(0, 0));
+            int posicionXAlien = Convert.ToInt32(coordenadaAlien.X) + Convert.ToInt32(coordenadaCanvas.X);
+            bool moverHaciaDerecha = (posicionXAlien == 0);
+            
             this.pathAnimationStoryboard.Stop();
             this.pathAnimationStoryboard.Children.Clear();
-            
+                        
             this.Canvas.Children.Remove(pathAlien);
-            AnimarAlien();
+            AnimarAlien(moverHaciaDerecha);
         }
 
         /// <summary>
         /// Animar a la imágen del alien siguiendo un camino con forma de onda
         /// </summary>
-        private void AnimarAlien()
+        private void AnimarAlien(bool movimientoHaciaDerecha)
         {
             string nombreAnimacion = "AnimacionTranslateTransform_" + DateTime.Now.ToString("YYYYMMDDHHMMss") + "_" + numero.Next(0,100000).ToString();
 
@@ -66,7 +73,7 @@ namespace MasDeUnStoryboardMismoElemento
             alien.RenderTransform = animacionTranslateTransform;
 
             // Obtiene un camino con forma de onda y orientada hacia la derecha
-            PathGeometry caminoOnda = AgregarPuntosOndaCurvaBeizer(true);
+            PathGeometry caminoOnda = AgregarPuntosOndaCurvaBeizer(movimientoHaciaDerecha);
             caminoOnda.Freeze();
 
             // Dibujar el camino en el canvas
@@ -121,7 +128,19 @@ namespace MasDeUnStoryboardMismoElemento
         {
             PathGeometry animationPath = new PathGeometry();
             PathFigure pFigure = new PathFigure();
-            pFigure.StartPoint = new Point(0, 100);//todo...
+
+            // la coordenada de Y en el punto inicial
+            int puntoYCero = 100;
+
+            if (direccionDerecha)
+            {
+                pFigure.StartPoint = new Point(0, puntoYCero);
+            }
+            else
+            {
+                pFigure.StartPoint = new Point(this.Canvas.Width - 64, puntoYCero);
+            }
+            
             PolyBezierSegment segmentoBezier = new PolyBezierSegment();
 
             pFigure.Segments.Add(segmentoBezier);
@@ -130,32 +149,24 @@ namespace MasDeUnStoryboardMismoElemento
             // Determinar si inicia desde el extremo derecho o izquierdo de la pantalla
             int direccion = direccionDerecha ? 1 : -1;
 
-            // la coordenada de Y en el punto inicial
-            int puntoYCero = 100;
-
             // Determinar la coordenada de X en el punto inicial y el punto final
             // Determinar los puntos máximos y mínimos de Y en las dos partes de un ciclo
             int posicionInicial;
             int posicionFinal;
-            int puntoExtremoYPrimerCiclo;
-            int puntoExtremoYSegundoCiclo;
+            int puntoExtremoYPrimerCiclo = 0;
+            int puntoExtremoYSegundoCiclo = 200;
 
             if (direccionDerecha)
             {
                 // Si la figura se desplazará hacia la derecha: 
-                // La figura comenzará desde el valor máximo de X hasta el mínimo
-                // El punto máximo de Y de la primera mitad del ciclo será menor que la de la segunda
+                // La figura comenzará desde el valor mínimo de X hasta el máximo
                 posicionInicial = 0;
                 posicionFinal = Convert.ToInt32(this.Canvas.Width - 64);
-                puntoExtremoYPrimerCiclo = 0;
-                puntoExtremoYSegundoCiclo = 200;
             }
             else
             {
                 posicionInicial = Convert.ToInt32(this.Canvas.Width - 64);
                 posicionFinal = 0;
-                puntoExtremoYPrimerCiclo = 200;
-                puntoExtremoYSegundoCiclo = 0;
             }
 
             int cantCiclos = 3;
@@ -191,17 +202,17 @@ namespace MasDeUnStoryboardMismoElemento
                 distanciaPuntosCiclo = Convert.ToInt32(mitadCiclo / 3); // Distancia entre los puntos máximos y mínimos de Y
                 distanciaEntreDosPuntosCiclo = mitadCiclo - (distanciaPuntosCiclo * 2);
 
-                posicionXActual = posicionXActual + distanciaPuntosCiclo;
+                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
                 segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYPrimerCiclo));
-                posicionXActual = posicionXActual + distanciaEntreDosPuntosCiclo;
+                posicionXActual = posicionXActual + distanciaEntreDosPuntosCiclo * direccion;
                 segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYPrimerCiclo));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo;
+                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
                 segmentoBezier.Points.Add(new Point(posicionXActual, puntoYCero));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo;
+                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
                 segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYSegundoCiclo));
-                posicionXActual = posicionXActual + distanciaEntreDosPuntosCiclo;
+                posicionXActual = posicionXActual + distanciaEntreDosPuntosCiclo * direccion;
                 segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYSegundoCiclo));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo;
+                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
                 segmentoBezier.Points.Add(new Point(posicionXActual, puntoYCero));
             }
 
