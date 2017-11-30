@@ -64,6 +64,7 @@
     <Compile Include="Direccion.cs" />
     <Compile Include="Figura.cs" />
     <Compile Include="GeneradorCaminoOndulado.cs" />
+    <Compile Include="GeneradorCaminoZigZag.cs" />
     <Compile Include="IGeneradorCamino.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

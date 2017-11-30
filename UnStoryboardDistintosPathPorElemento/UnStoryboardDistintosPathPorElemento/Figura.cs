@@ -166,11 +166,11 @@ namespace UnStoryboardDistintosPathPorElemento
             // Obtiene un camino con forma de onda y orientada hacia la dirección correcta
             if(moverHaciaDerecha)
             {
-                nuevoCamino = generadorCamino.ObtenerCamino(Direccion.Derecha, 100, 0, Convert.ToInt32(canvas.Width - imagen.Width));
+                nuevoCamino = generadorCamino.ObtenerCamino(Direccion.Derecha, posicionVertical, 0, Convert.ToInt32(canvas.Width - imagen.Width));
             }
             else
             {
-                nuevoCamino = generadorCamino.ObtenerCamino(Direccion.Izquierda, 100, 0, Convert.ToInt32(canvas.Width - imagen.Width));
+                nuevoCamino = generadorCamino.ObtenerCamino(Direccion.Izquierda, posicionVertical, 0, Convert.ToInt32(canvas.Width - imagen.Width));
             }
 
             // Dibujar el camino en el canvas
