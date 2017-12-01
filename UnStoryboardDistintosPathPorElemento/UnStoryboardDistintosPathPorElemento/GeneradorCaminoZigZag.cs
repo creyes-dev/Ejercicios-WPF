@@ -94,10 +94,12 @@ namespace UnStoryboardDistintosPathPorElemento
                     anchoCiclo = numero.Next(80, 360);
                 }
 
-                distanciaPuntosCiclo = Convert.ToInt32(anchoCiclo / 3); // Distancia entre los puntos máximos y mínimos de Y
+                distanciaPuntosCiclo = Convert.ToInt32(anchoCiclo / 4); // Distancia entre los puntos máximos y mínimos de Y
 
                 posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
                 segmentoLineal.Points.Add(new Point(posicionXActual, puntoExtremoYPrimerCiclo));
+                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
+                segmentoLineal.Points.Add(new Point(posicionXActual, puntoNeutroY));
                 posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
                 segmentoLineal.Points.Add(new Point(posicionXActual, puntoExtremoYSegundoCiclo));
                 posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
