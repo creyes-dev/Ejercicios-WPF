@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace UnStoryboardDistintosPathPorElemento
 {
-    public class GeneradorCaminoOndulado : IGeneradorCamino
+    public class GeneradorCaminoCurvas : IGeneradorCamino
     {
         /// <summary>
         /// Genera un camino conformado por curvas beizer para dibujar una onda 
@@ -47,9 +47,9 @@ namespace UnStoryboardDistintosPathPorElemento
             // Determinar los puntos máximos y mínimos de Y en las dos partes de un ciclo
             int posicionInicial;
             int posicionFinal;
-            int puntoExtremoYPrimerCiclo = puntoNeutroY - 100;
-            int puntoExtremoYSegundoCiclo = puntoNeutroY + 100;
-            
+            int posicionMaximaY = puntoNeutroY + 100;
+            int posicionMinimaY = puntoNeutroY - 100;
+
             if (orientacion == Direccion.Derecha)
             {
                 // Si la figura se desplazará hacia la derecha: 
@@ -63,12 +63,12 @@ namespace UnStoryboardDistintosPathPorElemento
                 posicionFinal = 0;
             }
 
-            int cantCiclos = 3;
-            int mitadCiclo;
-            int distanciaPuntosCiclo = 0;
-            int distanciaEntreDosPuntosCiclo = 0;
+            int cantCiclos = 4;
 
             int posicionXActual = posicionInicial;
+            int puntoPosicionY = puntoNeutroY;
+            int puntoPosicionX = posicionInicial;
+            int posicioncitaY = puntoNeutroY;
             Random numero = new Random();
 
             for (int i = 1; i <= cantCiclos; i++)
@@ -93,22 +93,45 @@ namespace UnStoryboardDistintosPathPorElemento
                     anchoCiclo = numero.Next(200, 330);
                 }
 
-                mitadCiclo = Convert.ToInt32(anchoCiclo / 2); // punto de inflexión
-                distanciaPuntosCiclo = Convert.ToInt32(mitadCiclo / 3); // Distancia entre los puntos máximos y mínimos de Y
-                distanciaEntreDosPuntosCiclo = mitadCiclo - (distanciaPuntosCiclo * 2);
+                // PosicionXActual es la posicon del ultimo ciclo procesado la posicion actual es la siguiente:
+                int posicioncita = posicionXActual;
+                
+                // Generar puntos intermedios
+                while (posicioncita != posicionXActual + (anchoCiclo * direccion))
+                {
+                    if (direccion == 1)
+                    {
+                        posicioncita = numero.Next(posicioncita + 60,
+                                                    posicioncita + 120);
+                    }
+                    else
+                    {
+                        posicioncita = numero.Next(posicioncita - 120,
+                                                    posicioncita - 60);
+                    }
 
-                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYPrimerCiclo));
-                posicionXActual = posicionXActual + distanciaEntreDosPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYPrimerCiclo));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoNeutroY));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYSegundoCiclo));
-                posicionXActual = posicionXActual + distanciaEntreDosPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYSegundoCiclo));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoNeutroY));
+                    posicioncitaY = numero.Next(posicioncitaY - 80, posicioncitaY + 80);
+
+                    if(((posicioncita > posicionXActual + anchoCiclo) && (direccion == 1)) || 
+                        ((posicioncita < posicionXActual - anchoCiclo) && (direccion == -1)))
+                    {
+                        posicioncita = posicionXActual + anchoCiclo * direccion;
+                    }
+
+                    if (posicioncitaY > posicionMaximaY)
+                    {
+                        posicioncitaY = posicionMaximaY;
+                    }
+
+                    if(posicioncitaY < posicionMinimaY)
+                    {
+                        posicioncitaY = posicionMinimaY;
+                    }
+
+                    segmentoBezier.Points.Add(new Point(posicioncita, posicioncitaY));
+                }
+
+                posicionXActual = posicioncita;
             }
             return camino;
         }

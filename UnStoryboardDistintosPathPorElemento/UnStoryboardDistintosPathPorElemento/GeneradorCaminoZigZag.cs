@@ -12,8 +12,7 @@ namespace UnStoryboardDistintosPathPorElemento
     public class GeneradorCaminoZigZag : IGeneradorCamino
     {
         /// <summary>
-        /// Genera un camino conformado por lineas con dirección diagonal 
-        /// que conforman un camino en zig zag
+        /// Genera un camino conformado por llineas que se mueven horizontalmente en ambas direcciones
         /// </summary>
         /// <param name="orientacion">Define dónde inicia y termina el camino</param>
         /// <param name="puntoNeutroY">Altura en donde se posicionará la mitad del camino</param>
@@ -65,9 +64,7 @@ namespace UnStoryboardDistintosPathPorElemento
             }
 
             int cantCiclos = 3;
-            int mitadCiclo;
             int distanciaPuntosCiclo = 0;
-            int distanciaEntreDosPuntosCiclo = 0;
 
             int posicionXActual = posicionInicial;
             Random numero = new Random();

@@ -9,11 +9,11 @@ using System.Windows.Media.Imaging;
 
 namespace UnStoryboardDistintosPathPorElemento
 {
-    public class GeneradorCaminoOndulado : IGeneradorCamino
+    public class GeneradorCaminoLinea : IGeneradorCamino
     {
+
         /// <summary>
-        /// Genera un camino conformado por curvas beizer para dibujar una onda 
-        /// La cantidad de ciclos de la onda es constante pero el ancho del ciclo no es uniforme
+        /// Genera un camino conformado por llineas que se mueven horizontalmente en ambas direcciones
         /// </summary>
         /// <param name="orientacion">Define dónde inicia y termina el camino</param>
         /// <param name="puntoNeutroY">Altura en donde se posicionará la mitad del camino</param>
@@ -39,8 +39,9 @@ namespace UnStoryboardDistintosPathPorElemento
                 caminoFigura.StartPoint = new Point(valorMaximoX, puntoNeutroY);
             }
 
-            PolyBezierSegment segmentoBezier = new PolyBezierSegment();
-            caminoFigura.Segments.Add(segmentoBezier);
+            PolyLineSegment segmentoLineal = new PolyLineSegment();
+
+            caminoFigura.Segments.Add(segmentoLineal);
             camino.Figures.Add(caminoFigura);
 
             // Determinar la coordenada de X en el punto inicial y el punto final
@@ -49,7 +50,7 @@ namespace UnStoryboardDistintosPathPorElemento
             int posicionFinal;
             int puntoExtremoYPrimerCiclo = puntoNeutroY - 100;
             int puntoExtremoYSegundoCiclo = puntoNeutroY + 100;
-            
+
             if (orientacion == Direccion.Derecha)
             {
                 // Si la figura se desplazará hacia la derecha: 
@@ -63,12 +64,10 @@ namespace UnStoryboardDistintosPathPorElemento
                 posicionFinal = 0;
             }
 
+            int adelantoRetraso;
             int cantCiclos = 3;
-            int mitadCiclo;
-            int distanciaPuntosCiclo = 0;
-            int distanciaEntreDosPuntosCiclo = 0;
-
             int posicionXActual = posicionInicial;
+            
             Random numero = new Random();
 
             for (int i = 1; i <= cantCiclos; i++)
@@ -90,25 +89,20 @@ namespace UnStoryboardDistintosPathPorElemento
                 else
                 {
                     // No es el ultimo ciclo el ancho del mismo es al azar
-                    anchoCiclo = numero.Next(200, 330);
+                    anchoCiclo = numero.Next(80, 360);
                 }
 
-                mitadCiclo = Convert.ToInt32(anchoCiclo / 2); // punto de inflexión
-                distanciaPuntosCiclo = Convert.ToInt32(mitadCiclo / 3); // Distancia entre los puntos máximos y mínimos de Y
-                distanciaEntreDosPuntosCiclo = mitadCiclo - (distanciaPuntosCiclo * 2);
+                adelantoRetraso = Convert.ToInt32(numero.Next(-1, 1));
 
-                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYPrimerCiclo));
-                posicionXActual = posicionXActual + distanciaEntreDosPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYPrimerCiclo));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoNeutroY));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYSegundoCiclo));
-                posicionXActual = posicionXActual + distanciaEntreDosPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoExtremoYSegundoCiclo));
-                posicionXActual = posicionXActual + distanciaPuntosCiclo * direccion;
-                segmentoBezier.Points.Add(new Point(posicionXActual, puntoNeutroY));
+                posicionXActual = posicionXActual + anchoCiclo * direccion;
+                segmentoLineal.Points.Add(new Point(posicionXActual, puntoNeutroY));
+
+                if (adelantoRetraso != 0)
+                {
+                    segmentoLineal.Points.Add(new Point(posicionXActual + Convert.ToInt32(numero.Next(64,128)) * direccion * adelantoRetraso, puntoNeutroY));
+                    segmentoLineal.Points.Add(new Point(posicionXActual, puntoNeutroY));
+                }
+
             }
             return camino;
         }

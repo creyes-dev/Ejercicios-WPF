@@ -63,6 +63,8 @@
     </Compile>
     <Compile Include="Direccion.cs" />
     <Compile Include="Figura.cs" />
+    <Compile Include="GeneradorCaminoCurvas.cs" />
+    <Compile Include="GeneradorCaminoLinea.cs" />
     <Compile Include="GeneradorCaminoOndulado.cs" />
     <Compile Include="GeneradorCaminoZigZag.cs" />
     <Compile Include="IGeneradorCamino.cs" />
@@ -103,6 +105,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="galleta.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="car-loading.PNG" />
+    <Resource Include="Chromium.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

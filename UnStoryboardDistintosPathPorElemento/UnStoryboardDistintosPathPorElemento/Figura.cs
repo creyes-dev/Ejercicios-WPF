@@ -91,10 +91,13 @@ namespace UnStoryboardDistintosPathPorElemento
             string nombreAnimacion = imagen.Name + "_animacion";
 
             // La animación de transformación es instanciada, registrada y asociada a la imagen 
+            TransformGroup grupoTransformaciones = new TransformGroup();
+            imagen.RenderTransform = grupoTransformaciones;
+            
             TranslateTransform animacionTranslateTransform = new TranslateTransform();
             canvas.RegisterName(nombreAnimacion, animacionTranslateTransform);
-            imagen.RenderTransform = animacionTranslateTransform;
-
+            grupoTransformaciones.Children.Add(animacionTranslateTransform);
+            
             // Obtiene un camino con forma de onda y orientada hacia la dirección del movimiento
             PathGeometry caminoOnda = generadorCamino.ObtenerCamino(direccion, 
                 posicionVertical, 0, Convert.ToInt32(canvas.Width - 64));
@@ -141,7 +144,7 @@ namespace UnStoryboardDistintosPathPorElemento
             // Iniciar la animación
             storyboard.Begin(canvas);
         }
-
+        
         /// <summary>
         /// Procedimiento que es utilizado para ser suscrito a la finalización de la animación
         /// para iniciarla de nuevo pero con un camino nuevo y hacia la dirección contraria
