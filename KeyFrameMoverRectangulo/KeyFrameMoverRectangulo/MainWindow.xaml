@@ -1,0 +1,8 @@
+﻿<Window x:Class="KeyFrameMoverRectangulo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="1150" Loaded="Window_Loaded">
+    <Grid>
+        <Rectangle x:Name="rectangulo" Fill="Blue" Stroke="Black" StrokeThickness="5" Width="50" Height="50" />
+    </Grid>
+</Window>
